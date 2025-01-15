@@ -1,0 +1,9 @@
+def copy_sudoku (sudoku_board : list)->list:
+    new_sudoku_board = []
+    for row in sudoku_board:
+        new_row = []
+        for cell in row:
+            new_row.append(cell)
+        new_sudoku_board.append(new_row)
+
+    return new_sudoku_board
