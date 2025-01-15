@@ -1,0 +1,26 @@
+
+def options(sudoku_board : list , loc :tuple)->str or None:
+
+    row = loc[0]
+    column = loc[1]
+
+    if sudoku_board[row][column]!=-1:
+        return []
+
+    else:
+
+        final_options = []
+
+        option_to_add_row = row_options(sudoku_board,(row,column))
+        option_to_add_column = column_options(sudoku_board,(row,column))
+        option_to_add_square = square_options(sudoku_board,(row,column))
+
+        for digit in option_to_add_row:
+            if digit in option_to_add_column and digit in option_to_add_square:
+                final_options.append(int(digit))
+
+        if len(final_options)==0:
+            return None
+
+        return final_options
+
