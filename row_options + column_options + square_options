@@ -1,0 +1,51 @@
+
+def row_options (sudoku_board : list, loc :tuple)->str:
+
+    row = loc[0]
+    list_of_row = sudoku_board[row]
+    option_to_add_row = ""
+
+    for i in range(1, 10):
+        if not i in list_of_row:
+            option_to_add_row = option_to_add_row + str(i)
+
+    return option_to_add_row
+
+def column_options (sudoku_board : list, loc :tuple)->str:
+    option_to_add_column = ""
+    column_by_str = ""
+    column = loc[1]
+
+    for i in range(9):
+        if sudoku_board[i][column] == -1:
+            column_by_str = column_by_str + "0"
+        else:
+            column_by_str = column_by_str + str(sudoku_board[i][column])
+
+    for j in range(1, 10):
+        if not str(j) in column_by_str:
+            option_to_add_column = option_to_add_column + str(j)
+
+    return option_to_add_column
+
+def square_options (sudoku_board : list, loc :tuple)->str:
+    row = loc[0]
+    column = loc[1]
+
+    option_to_add_square = ""
+    square_by_str = ""
+    start_row = (row // 3) * 3
+    start_column = (column // 3) * 3
+
+    for row in range(start_row, start_row + 3):
+        for column in range(start_column, start_column + 3):
+            if sudoku_board[row][column] == -1:
+                square_by_str = square_by_str + "0"
+            else:
+                square_by_str = square_by_str + str(sudoku_board[row][column])
+
+    for j in range(1, 10):
+        if not str(j) in square_by_str:
+            option_to_add_square = option_to_add_square + str(j)
+
+    return option_to_add_square
