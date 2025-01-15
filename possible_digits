@@ -1,17 +1,17 @@
 
 def possible_digits(sudoku_board : list)->list:
 
-    possible_digits_board = copy_sudoku(sudoku_board)
+    possibilities = copy_sudoku(sudoku_board)
     for i in range (9):
         for j in range (9):
             if not sudoku_board[i][j]==-1:
-                possible_digits_board[i][j]=[]
+                possibilities[i][j]=[]
             else:
-                possible_digits_list = options(sudoku_board,(i,j)) 
+                possible_digits_list = options(sudoku_board,(i,j))
                 if len(possible_digits_list)==0:
-                    possible_digits_board[i][j]=None
+                    possibilities[i][j]=None
                 else:
-                    possible_digits_board[i][j]=possible_digits_list
- 
+                    possibilities[i][j]=possible_digits_list
 
-    return possible_digits_board
+
+    return possibilities
