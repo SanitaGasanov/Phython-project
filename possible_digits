@@ -1,5 +1,5 @@
 
-def possible_digits(sudoku_board : list)->list:
+def possible_digits(sudoku_board : list)->list: 
 
     possibilities = copy_sudoku(sudoku_board)
     for i in range (9):
