@@ -7,3 +7,4 @@ def copy_sudoku (sudoku_board : list)->list:
         new_sudoku_board.append(new_row)
 
     return new_sudoku_board
+ 
