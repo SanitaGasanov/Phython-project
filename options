@@ -9,7 +9,7 @@ def options(sudoku_board : list , loc :tuple)->str or None:
 
     else:
 
-        final_options = []
+        final_options = [] 
 
         option_to_add_row = row_options(sudoku_board,(row,column))
         option_to_add_column = column_options(sudoku_board,(row,column))
