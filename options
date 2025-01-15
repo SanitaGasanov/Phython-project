@@ -5,7 +5,7 @@ def options(sudoku_board : list , loc :tuple)->str or None:
     column = loc[1]
 
     if sudoku_board[row][column]!=-1: 
-        return []
+        return [] 
 
     else:
 
