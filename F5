@@ -1,0 +1,21 @@
+import random
+def create_random_board ( sudoku_board: list)->list:
+    num_of_slots_with_value= random.randrange(10,21)   #כוללת גם את 20
+    new_sudoku_board= copy_sudoku(sudoku_board) #פונקציית עזר שמעתיקה 1
+    max_possible_slots = 81  # according to possible
+    possible_list= create_possible_list(81)       #פונקציית עזר שעושה רשימה של אפשרויות לפי אינדקסים2
+    while num_of_slots_with_value>0 :        #while num>0
+      if len(possible_list)==0:
+          break
+      my_index=random.choice(possible_list)
+      value= random.randrange(1,10)
+      if value in options(new_sudoku_board,my_index):#כאןיש קריאה לפונקציה הראשונה של אופיר
+         possible_list.remove(my_index)
+         max_possible_slots -=1
+         num_of_slots_with_value -=1
+         new_sudoku_board[my_index[0]][my_index[1]]= value
+      else:
+         possible_list.remove(my_index)
+         max_possible_slots -= 1
+
+    return new_sudoku_board
