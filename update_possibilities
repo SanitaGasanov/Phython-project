@@ -1,0 +1,28 @@
+
+def update_possibilities (possibilities : list, loc : tuple, value : int):
+
+    row = loc [0]
+    column = loc [1]
+
+#הסרת הערך מכל האפשרויות בשורה
+
+    for i in range (9):
+        if value in possibilities[row][i]:
+            possibilities[row][i].remove(value)
+
+#הסרת את הערך מהטור
+
+    for i in range(9):
+        if value in possibilities[i][column]:
+            possibilities[i][column].remove(value)
+
+#הסרת הערך מהריבוע
+
+
+    start_row = (row // 3) * 3
+    start_col = (column // 3) * 3
+    for i in range(start_row, start_row + 3):
+        for j in range(start_col, start_col + 3):
+            if value in possibilities[i][j]:
+                possibilities[i][j].remove(value)
+
