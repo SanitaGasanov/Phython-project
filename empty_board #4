@@ -10,5 +10,3 @@ def empty_board ()->list:
         empty_board.append(row)
 
     return empty_board
-
-print(empty_board())
