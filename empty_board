@@ -1,0 +1,14 @@
+def empty_board ()->list:
+    
+    empty_board = []
+    row = []
+
+    for i in range (9):
+        row.append(-1)
+        
+    for i in range (9):
+        empty_board.append(row)
+
+    return empty_board
+
+print(empty_board())
