@@ -1,0 +1,15 @@
+def create_possible_list(num:int)->list:
+    possible_list=[]
+    row=0
+    column=0
+    for i in range(num):
+        if column<8:
+            possible_list.append((r,column))
+            column+=1
+        elif column==8:
+            possible_list.append((r,column))
+            row+=1
+            column=0
+    return possible_list
+
+print(create_possible_list(81))
