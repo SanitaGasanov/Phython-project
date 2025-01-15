@@ -15,6 +15,3 @@ def possible_digits(sudoku_board : list)->list:
 
 
     return possible_digits_board
-
-
-#sudoku_
