@@ -12,6 +12,6 @@ def possible_digits(sudoku_board : list)->list:
                     possible_digits_board[i][j]=None
                 else:
                     possible_digits_board[i][j]=possible_digits_list
-
+ 
 
     return possible_digits_board
