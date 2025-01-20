@@ -1,4 +1,4 @@
-def print_board(sudoku_board):
+def print_board(sudoku_board : list)->None:
     for i in range(9):
         print("-------------------")
 
@@ -12,4 +12,5 @@ def print_board(sudoku_board):
         print("|", end="")
 
         print("")
+
 
