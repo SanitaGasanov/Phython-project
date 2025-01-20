@@ -1,0 +1,31 @@
+NOT_FINISH="NOT_FINISH"
+SUCCESS_FINISH="SUCCESS_FINISH"
+FINISH_FAILURE= "FINISH_FAILURE"
+
+def one_stage(sudoku_board:list, possibilities:list)->str or tuple: #לשים את המשתנים הקבועים התחילת התוכנית
+    new_sudoku_board= copy_sudoku(sudoku_board)    #מעתיקה לי את הלוח ללוח החדש
+    element = 0                                    #אלמנט שווה 0
+    while element<81:                              #כאשר אלמנט פחות מ81
+      element=0                                    #אחרי כל פור אני נכנסת לוויל והאלמנט מתאפס
+      for x in range(9):                           #0 1 2 3 4 5 6 7 8
+          for y in range(9):                        #0 1 2 3 4 5 6 7 8
+              if len(possibilities[x][y])==1:        #אם לאיבר הספציפי עם הקורדינטות יש אפוציה אחת
+                new_value= possibilities[x][y][0]      #מעדכנת הניו ווליו לפי האפשרות היחידה
+                new_sudoku_board[x][y]=new_value        #מעדכנת את הלוח שלי
+                update_possibilities(possibilities,(x,y),new_value,)  #עדכון המטריצה אופיר צריכה להוציא
+              else:
+                  element +=1                           #אם אין אפילו אחד למילוי
+    no_empty = True
+    for row in range(9):
+        for column in range(9):
+           #פה הורדתי את הno_empty
+           if new_sudoku_board[row][column]== -1:   #אם יש איבר שהוא מינוס אחד
+                 no_empty=False                     #משנה פרמטר
+                 my_index= min_option(possibilities)     #לעשות בדיקה שרצה ומחזירה את ההכי קטן
+                 return NOT_FINISH, my_index    #קבוע וטאפל
+    if no_empty:                              #אם כל האיברים מלאים
+        duplicat_parameter= is_duplicate(new_sudoku_board)
+        if duplicat_parameter== False:
+            return SUCCESS_FINISH    #קבוע
+        else:
+            return FINISH_FAILURE  #קבוע
