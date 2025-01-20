@@ -1,0 +1,15 @@
+def print_board(sudoku_board):
+    for i in range(9):
+        print("-------------------")
+
+        for j in range(9):
+            if sudoku_board[i][j] == -1:
+                print("|", end="")
+                print(" ", end="")
+            else:
+                print("|" ,end="")
+                print(sudoku_board[i][j], end="")
+        print("|", end="")
+
+        print("")
+
