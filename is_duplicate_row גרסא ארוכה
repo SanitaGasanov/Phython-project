@@ -1,0 +1,48 @@
+
+def is_duplicate_row (sudoku_board):
+
+    for i in range(9):
+        for j in range(1,10):
+            if not j in sudoku_board[i]:
+                return False
+
+    return True
+
+# בדיקת כפילויות בטור
+
+def is_duplicate_column(sudoku_board):
+    column_str = ""
+    for i in range(9):
+        for j in range(9):
+            column_str = column_str + str(sudoku_board[i][j])
+
+        for z in range(1,10):
+            if not str(z) in column_str:
+                return False
+
+        column_str = ""
+
+
+    return True
+
+# בדיקת כפילויות בריבוע - לא בטוח
+
+def is_duplicate_square(sudoku_board):
+    for row in range(0, 9, 3):
+        for col in range(0, 9, 3):
+            square_str = ""
+
+            for i in range(row, row + 3):
+                for j in range(col, col + 3):
+                    value = sudoku_board[i][j]
+                    if value != 0:
+                        if str(value) in square_str:
+                            return False
+                        square_str += str(value)
+
+    return True
+
+def is_duplicate (sudoku_board):
+    if is_duplicate_row(sudoku_board) and is_duplicate_column(sudoku_board) and is_duplicate_square(sudoku_board):
+        return True
+    return False
