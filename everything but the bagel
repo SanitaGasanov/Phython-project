@@ -1,0 +1,236 @@
+def none_check (possibilities : list)->bool:
+    for i in range (9):
+        for j in range (9):
+            if possibilities[i][j] is None:
+                return True
+    return False
+
+def row_options(sudoku_board: list, loc: tuple) -> str:
+    row = loc[0]
+    list_of_row = sudoku_board[row]
+    option_to_add_row = ""
+
+    for i in range(1, 10):
+        if i not in list_of_row:
+            option_to_add_row += str(i)
+
+    return option_to_add_row
+
+def column_options(sudoku_board: list, loc: tuple) -> str:
+    option_to_add_column = ""
+    column = loc[1]
+
+    for i in range(9):
+        if sudoku_board[i][column] != -1:
+            option_to_add_column += str(sudoku_board[i][column])
+
+    return option_to_add_column
+
+def square_options(sudoku_board: list, loc: tuple) -> str:
+    row = loc[0]
+    column = loc[1]
+
+    option_to_add_square = ""
+    start_row = (row // 3) * 3
+    start_column = (column // 3) * 3
+
+    for r in range(start_row, start_row + 3):
+        for c in range(start_column, start_column + 3):
+            if sudoku_board[r][c] != -1:
+                option_to_add_square += str(sudoku_board[r][c])
+
+    return option_to_add_square
+
+def options(sudoku_board: list, loc: tuple) -> str or None:
+    row = loc[0]
+    column = loc[1]
+
+    if sudoku_board[row][column] != -1:
+        return []  # אם התא כבר מלא, מחזירים רשימה ריקה
+
+    final_options = []
+
+    option_to_add_row = row_options(sudoku_board, (row, column))
+    option_to_add_column = column_options(sudoku_board, (row, column))
+    option_to_add_square = square_options(sudoku_board, (row, column))
+
+    # נרצה לוודא שהאפשרויות עבור השורה, העמודה והריבוע הן אכן מספרים שלא מופיעים
+    for digit in option_to_add_row:
+        if digit not in option_to_add_column and digit not in option_to_add_square:
+            final_options.append(int(digit))
+
+    if len(final_options) == 0:
+        return None
+
+    return final_options
+
+def copy_sudoku (sudoku_board : list)->list:
+    new_sudoku_board = []
+    for row in sudoku_board:
+        new_row = []
+        for cell in row:
+            new_row.append(cell)
+        new_sudoku_board.append(new_row)
+
+    return new_sudoku_board
+
+def possible_digits(sudoku_board : list)->list or None:
+    possibilities = copy_sudoku(sudoku_board)
+    for i in range (9):
+        for j in range (9):
+            possibilities[i][j]= options(sudoku_board,(i,j))
+
+    return possibilities
+
+def is_duplicate_row (sudoku_board):
+
+    for i in range(9):
+        for j in range(1,10):
+            if not j in sudoku_board[i]:
+                return False
+
+    return True
+
+def is_duplicate_column(sudoku_board):
+    column_str = ""
+    for i in range(9):
+        for j in range(9):
+            column_str = column_str + str(sudoku_board[i][j])
+
+        for z in range(1,10):
+            if not str(z) in column_str:
+                return False
+
+        column_str = ""
+
+
+    return True
+
+def is_duplicate_square(sudoku_board):
+    for row in range(0, 9, 3):
+        for col in range(0, 9, 3):
+            square_str = ""
+
+            for i in range(row, row + 3):
+                for j in range(col, col + 3):
+                    value = sudoku_board[i][j]
+                    if value != 0:
+                        if str(value) in square_str:
+                            return False
+                        square_str += str(value)
+
+    return True
+
+def is_duplicate (sudoku_board):
+    if is_duplicate_row(sudoku_board) and is_duplicate_column(sudoku_board) and is_duplicate_square(sudoku_board):
+        return False  #אם אין כפילות
+    return True  #אם כפילות
+
+def min_option(possibilities: list) -> tuple:   #עזר לפונק 3 מחזירה טאפל מינימלי
+    min_index = None
+    min_len = 9  # הערך המקסימלי
+    for x in range(9):  # 012345678
+        for y in range(9):  # 012345678
+            if len(possibilities[x][y])<min_len and len(possibilities[x][y])>0:  # אורך המיקום
+                min_len = len(possibilities[x][y])  # משנה את המינימום שלי
+                min_index = (x, y)  # יוצרת טאפל
+    return min_index
+
+NOT_FINISH="NOT_FINISH"
+SUCCESS_FINISH="SUCCESS_FINISH"
+FINISH_FAILURE= "FINISH_FAILURE"
+
+def one_stage(sudoku_board:list, possibilities:list)->str or tuple:
+
+    element = 0
+    while element < 81:  # כאשר אלמנט פחות מ81
+        element = 0  # אחרי כל פור אני נכנסת לוויל והאלמנט מתאפס
+        for x in range(9):  # 0 1 2 3 4 5 6 7 8
+            for y in range(9):  # 0 1 2 3 4 5 6 7 8
+                if len(possibilities[x][y]) == 1:
+                    new_value = possibilities[x][y][0]  # מעדכנת הניו ווליו לפי האפשרות היחידה
+                    sudoku_board[x][y] = new_value  # מעדכנת את הלוח שלי
+                    possibilities = possible_digits(sudoku_board)
+                    if none_check(possibilities):
+                        return FINISH_FAILURE
+
+                    # אם לאיבר הספציפי עם הקורדינטות יש אפוציה אחת
+                else:
+                    element += 1
+                    # אם אין אפילו אחד למילוי
+    no_empty = True
+    for row in range(9):
+        for column in range(9):
+            # פה הורדתי את הno_empty
+            if sudoku_board[row][column] == -1:  # אם יש איבר שהוא מינוס אחד
+                no_empty = False  # משנה פרמטר
+                my_index = min_option(possibilities)  # לעשות בדיקה שרצה ומחזירה את ההכי קטן
+                return NOT_FINISH, my_index  # קבוע וטאפל
+    if no_empty:  # אם כל האיברים מלאים
+        duplicat_parameter = is_duplicate(sudoku_board)
+        if duplicat_parameter == False:
+            return SUCCESS_FINISH  # קבוע
+        else:
+            return FINISH_FAILURE  # קבוע
+
+
+def fill_board(sudoku_board:list, possibilities:list)->str:
+    counter = 0                        #משכפלת את לוח הסודוקו על מנת שיהיה אפשר ללשנות עליו בלי את המקור                       #אותו הדבר לפוסיבילטיס
+    my_tuple= one_stage(sudoku_board,possibilities)          #הטאפל שחוזר מ3
+
+    while my_tuple[0]==NOT_FINISH:                  #לולאה שכל עוד זה נוט פיניש
+
+        list_for_min_loc= options(sudoku_board,my_tuple[1]) #רשימת אפשרויות מינימלית
+
+        if none_check(possibilities):
+            return FINISH_FAILURE
+
+        else:
+
+            print("Please choose one of the options:",list_for_min_loc)        # מדפיסה את האפשרויות של המינימלי
+            user_choice= int(input())         # המשתמש בוחר מספר מהאפשרויות
+
+            while user_choice not in list_for_min_loc and counter<4:
+               counter += 1
+               print("Invalid choice. Please choose one of the options:", list_for_min_loc)
+               user_choice = int(input())
+
+            if user_choice in list_for_min_loc and counter<4: # הם המספר חוקי לפי הרשימה- להוסיף בסוף תנאי מה קורה אם לא חוקי
+                counter=0
+                row = my_tuple[1][0]  # את השורה הוצאה מהטאפל
+                column = my_tuple[1][1]
+                sudoku_board[row][column] = user_choice
+                possibilities = possible_digits(sudoku_board)
+
+                if none_check(possibilities):
+                    return FINISH_FAILURE
+
+                my_tuple = one_stage(sudoku_board, possibilities)
+
+
+            if counter==4:
+                return FINISH_FAILURE
+
+        if my_tuple[1] is None:
+            return FINISH_FAILURE
+
+    return my_tuple
+
+
+# דוגמת לוח סודוקו
+op =   [[-1,6,-1,4,3,-1,-1,-1,1],
+ [5,-1,-1,-1,7,-1,-1,-1,-1],
+ [-1,1,-1,9,-1,-1,8,-1,-1],
+ [-1,-1,-1,-1,-1,2,3,-1,9],
+ [-1,8,-1,-1,-1,-1,-1,6,-1],
+ [-1,-1,-1,-1,-1,-1,-1,-1,-1],
+ [-1,-1,-1,-1,-1,-1,-1,-1,-1],
+ [9,-1,2,3,-1,-1,-1,-1,4],
+ [-1,-1,4,7,2,-1,-1,-1,8]]
+
+
+
+pos1 = [[[], [3, 9], [], [3, 6, 9], [], [2, 6, 8], [8, 9], [], [2, 8]], [[], [7, 9], [], [], [5, 9], [5, 8], [], [4, 7, 9], [5, 7, 8]], [[], [3, 7, 9], [], [3, 9], [], [2, 5], [5, 7, 9], [], [2, 5, 7]], [[3, 4, 7, 8, 9], [], [3, 9], [7, 9], [], [1], [1, 4, 7, 8, 9], [], [1, 3, 7, 8]], [[4, 7, 9], [], [6, 9], [], [5, 9], [], [1, 4, 7, 9], [4, 7, 9], [1, 7]], [[3, 7, 8, 9], [1, 3, 7, 9], [3, 9], [7, 9], [2, 9], [], [1, 7, 8, 9], [], []], [[9], [], [], [], [], [], [], [], []], [[2, 4], [], [], [4, 6], [], [], [5, 6], [], [5]], [[3, 4], [3, 4], [3, 5], [], [], [6], [1, 5, 6, 7], [7], []]]
+possibilulu= possible_digits(op)
+print(fill_board(op,possibilulu))
+
