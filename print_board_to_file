@@ -1,0 +1,15 @@
+def print_board_to_file(sudoku_board : list, file_name : str):
+    printed_board = ""
+    for i in range(9):
+        printed_board += "-------------------\n"
+
+        for j in range(9):
+            if sudoku_board[i][j] == -1:
+                printed_board += "|"
+                printed_board += " "
+            else:
+                printed_board += "|"
+                printed_board += str(sudoku_board[i][j])
+        printed_board += "|\n"
+    printed_board += "-------------------"
+    file_name.write(printed_board)
